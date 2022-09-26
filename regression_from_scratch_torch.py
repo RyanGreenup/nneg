@@ -9,12 +9,14 @@ N = 30
 x = np.linspace(start=1, stop=10, num=N)
 e = np.random.normal(0, 10, N)
 y = x *x + e
+# for comparison
+y = x
 x = torch.from_numpy(x).reshape(-1, 1).float()
 y = torch.from_numpy(y).reshape(-1, 1).float()
 
 # Generate Weights
-h1 = 32
-h2 = 16
+h1 = 16
+h2 = 1
 w1: torch.Tensor = torch.tensor(np.random.normal(0, 1, (1, h1)), requires_grad=True)
 w2: torch.Tensor = torch.tensor(np.random.normal(0, 1, (h1, h2)), requires_grad=True)
 w3: torch.Tensor = torch.tensor(np.random.normal(0, 1, (h2, 1)), requires_grad=True)
@@ -24,8 +26,8 @@ def model(x):
     x = torch.matmul(x, w1.float())
     x = torch.sigmoid(x)
     x = torch.matmul(x, w2.float())
-    x = torch.sigmoid(x)
-    x = torch.matmul(x, w3.float())
+#    x = torch.si*gmoid(x)
+#    x = torch.matmul(x, w3.float())
     return x
 
 plt.scatter(x, y )
@@ -47,7 +49,7 @@ for t in range(EPOCH):
     loss.backward()
     losses.append(loss.detach().numpy())
 
-    for p in [w1, w2, w3]:
+    for p in [w1, w2]:
         with torch.no_grad():
             temp = p - p.grad * eta
             p.copy_(temp)
